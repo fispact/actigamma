@@ -5,7 +5,7 @@ import json
 # hacky but will do, the database is one large JSON file with line data
 # we load it into a static data structure which is our database
 __RAW_DATABASE_DECAY_2012_FILE__ = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-    '..', 'reference', 'lines_decay_2012.json')
+    'data', 'lines_decay_2012.min.json')
 
 # potential to add other libraries here
 
@@ -29,21 +29,42 @@ class ReadOnlyDatabase(object):
         TODO: handle uncertainties too
     """
     def __init__(self, datasource):
-        self._db = {}
+        self._raw = {}
         with datasource as db:
-            self._db = db
+            self._raw = db
 
-    def getenergies(self, nuclide, type="gamma"):
+    def getname(self, zai: int) -> str:
+        """
+            ZAI
+        """
+        for k, v in self._raw.items():
+            if v['zai'] == zai:
+                return k
+        return None
+
+    def getzai(self, nuclide: str) ->int:
+        """
+            ZAI
+        """
+        return self._raw[nuclide]['zai']
+
+    def gethalflife(self, nuclide: str):
+        """
+            Half-life in seconds
+        """
+        return self._raw[nuclide]['halflife']
+
+    def getenergies(self, nuclide: str, type: str="gamma"):
         """
             Defaults to gamma lines
         """
-        return self._db[nuclide][type]['lines']["energies"]
+        return self._raw[nuclide][type]['lines']['energies']
 
-    def getintensities(self, nuclide, type="gamma"):
+    def getintensities(self, nuclide: str, type: str="gamma"):
         """
             Defaults to gamma lines
 
             Also multiplies by normalisation constant
         """
-        return[ intensity*self._db[nuclide][type]['lines']["norms"][i] 
-                for i,intensity in enumerate(self._db[nuclide][type]['lines']["intensities"])]
+        return[ intensity*self._raw[nuclide][type]['lines']['norms'][i] 
+                for i,intensity in enumerate(self._raw[nuclide][type]['lines']['intensities'])]

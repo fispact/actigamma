@@ -28,7 +28,7 @@ class EnergyGrid(object):
     def __len__(self):
         return len(self.bounds)
 
-    def __getitem__(self, i):
+    def __getitem__(self, i: int):
         return self.bounds[i]
 
     def __str__(self):
