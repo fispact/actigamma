@@ -3,3 +3,9 @@ class ActiGammaException(Exception):
 
 class UnphysicalValueException(ActiGammaException):
     pass
+
+class UnknownOrUnstableNuclideException(ActiGammaException):
+    pass
+
+class NoDataException(ActiGammaException):
+    pass
