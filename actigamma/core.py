@@ -35,6 +35,10 @@ class EnergyGrid(object):
         return str(self.bounds)
 
     @property
+    def nrofbins(self):
+        return len(self)-1
+
+    @property
     def units(self):
         """
             TODO: support other units
@@ -46,7 +50,7 @@ class EnergyGrid(object):
         """
             In eV
         """
-        return [ (lower + self.bounds[i+1])*0.5 for i, lower in enumerate(self.bounds[:-1])]
+        return np.array([ (lower + self.bounds[i+1])*0.5 for i, lower in enumerate(self.bounds[:-1])])
 
     @property
     def minEnergy(self):

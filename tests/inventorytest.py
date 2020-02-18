@@ -14,7 +14,6 @@ class UnstablesInventoryUnitTest(unittest.TestCase):
         self.assertEqual([10030, 9202350], inv.zais, "Assert zais")
         self.assertEqual([38.321e4, 3.2e17], inv.activities, "Assert activity")
 
-
     def test_initinvalid(self):
         with self.assertRaises(TypeError):
             ag.UnstablesInventory(data=[(10010, 1e20), (30040, 3.2e17), 8.9])

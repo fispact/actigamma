@@ -2,6 +2,7 @@ import unittest
 import os
 
 from .inventorytest import UnstablesInventoryUnitTest
+from .coretest import EnergyGridUnitTest
 
 def main():
     unittest.TextTestRunner(verbosity=3).run(unittest.TestSuite())
