@@ -77,7 +77,7 @@ class LineComputor(object):
         Needs testing!
     """
 
-    __slots__ = [ 'db', 'grid', 'lines', 'values', 'linetype' ]
+    __slots__ = [ 'db', 'grid', 'lines', 'values' ]
 
     def __init__(self, db: ReadOnlyDatabase, grid: EnergyGrid):
         self.db = db
@@ -85,9 +85,6 @@ class LineComputor(object):
         self.grid = grid
 
         # here we just store lines and intensities
-        # we loose knowledge of original nuclide
-        # maybe later we will need this
-        # TODO: better datastructure - ordereddict might be better
         self.lines = []
 
         # NOTE: values are intensities multiplied by the activity of each nuclide here
@@ -127,14 +124,8 @@ class LineComputor(object):
             for i, line in enumerate(self.lines):
                 # loop over bounds from the last found bin
                 for j in range(ibin, len(self.grid)-1):
-                    lowerEnergy = self.grid[j]
-                    upperEnergy = self.grid[j+1]
-                    if line >= lowerEnergy and line < upperEnergy:
+                    if line >= self.grid[j] and line < self.grid[j+1]:
                         hist[j] += self.values[i]
                         ibin = j
 
-
-        # should be density=False since we can have multiple lines per decay - cannot get numpy histogram to work
-        # with the data correctly
-        # return np.histogram(self.lines, bins=self.grid.bounds, weights=self.values, density=False)
         return hist, self.grid.bounds
