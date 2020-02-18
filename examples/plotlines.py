@@ -15,10 +15,10 @@ inv = ag.UnstablesInventory(data=[
 ])
 
 # define an energy grid between 0 and 4 MeV with 10,000 bins
-grid = ag.EnergyGrid(bounds=ag.linspace(0.0, 4e6, 1000))
+grid = ag.EnergyGrid(bounds=ag.linspace(0.0, 4e6, 10000))
 
 # or we can do logspace between 1e3 eV and 1e7 eV with 10,000 bins
-# grid = ag.EnergyGrid(bounds=ag.logspace(3, 7, 1000))
+# grid = ag.EnergyGrid(bounds=ag.logspace(3, 7, 10000))
 # plt.xscale('log')
 
 # bin the lines appropriately

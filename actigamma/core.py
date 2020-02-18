@@ -114,7 +114,7 @@ class LineComputor(object):
             self.lines.extend(self.db.getenergies(name, type=type))
             self.values.extend(self.db.getintensities(name, type=type)*activity)
 
-        hist = [0.0]*self.grid.nrofbins
+        hist = np.zeros(self.grid.nrofbins)
 
         if len(self.lines) > 0:
             # sort the lines in ascending energy to make it easier to bin in a histogram
