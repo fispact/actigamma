@@ -79,7 +79,7 @@ class LineComputor(object):
 
     __slots__ = [ 'db', 'grid', 'lines', 'values', 'linetype' ]
 
-    def __init__(self, db: ReadOnlyDatabase, grid: EnergyGrid, type: str="gamma"):
+    def __init__(self, db: ReadOnlyDatabase, grid: EnergyGrid):
         self.db = db
 
         self.grid = grid
@@ -93,9 +93,7 @@ class LineComputor(object):
         # NOTE: values are intensities multiplied by the activity of each nuclide here
         self.values = []
 
-        self.linetype = type
-
-    def __call__(self, inventory: UnstablesInventory, *args, **kwargs):
+    def __call__(self, inventory: UnstablesInventory, *args, type: str="gamma", **kwargs):
         """
             Gets the lines from the full inventory
 
@@ -109,12 +107,12 @@ class LineComputor(object):
                     "{} not in database - maybe too exotic or is it stable?".format(zai))
 
             # check that data exists for that decay type
-            if self.linetype not in self.db.gettypes(name):
+            if type not in self.db.gettypes(name):
                 raise NoDataException(
-                    "{} does not have {} decay mode".format(name, self.linetype))
+                    "{} does not have {} decay mode".format(name, type))
 
-            self.lines.extend(self.db.getenergies(name, type=self.linetype))
-            self.values.extend(self.db.getintensities(name, type=self.linetype)*activity)
+            self.lines.extend(self.db.getenergies(name, type=type))
+            self.values.extend(self.db.getintensities(name, type=type)*activity)
 
         hist = [0.0]*self.grid.nrofbins
 
