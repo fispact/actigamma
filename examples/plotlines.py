@@ -21,7 +21,7 @@ grid = ag.EnergyGrid(bounds=ag.linspace(0.0, 4e6, 1000))
 # grid = ag.EnergyGrid(bounds=ag.logspace(3, 7, 1000))
 # plt.xscale('log')
 
-# know we need to get the lines
+# bin the lines appropriately
 lc = ag.LineComputor(db, grid, type=SPECTYPE)
 hist, bin_edges = lc(inv)
 
