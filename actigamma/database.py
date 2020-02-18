@@ -30,7 +30,7 @@ class ReadOnlyDatabase(object):
     """
         TODO: handle uncertainties too
     """
-    def __init__(self, datasource):
+    def __init__(self, datasource=DatabaseJSONFileLoader()):
         self._raw = {}
         with datasource as db:
             self._raw = db

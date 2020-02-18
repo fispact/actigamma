@@ -1,3 +1,4 @@
+import math
 import numpy as np
 
 from .exceptions import UnphysicalValueException, \
@@ -6,6 +7,8 @@ from .exceptions import UnphysicalValueException, \
 from .database import ReadOnlyDatabase
 from .decorators import asarray
 from .inventory import UnstablesInventory
+
+LOG_TWO_BASE_E = math.log(2)
 
 linspace = np.linspace
 logspace = np.logspace
@@ -129,3 +132,19 @@ class LineComputor(object):
                         ibin = j
 
         return hist, self.grid.bounds
+
+def activity_from_atoms(db: ReadOnlyDatabase, nuclide: str, atoms: float) -> float:
+    """
+        Returns activity (Bq) given a number of atoms (typical in FISPACT-II or alike)
+        
+        Nuclide must exist in data and must be unstable
+    """
+    return LOG_TWO_BASE_E*atoms/db.gethalflife(nuclide)
+
+def atoms_from_activity(db: ReadOnlyDatabase, nuclide: str, activity: float) -> float:
+    """
+        Returns the number of atoms given an activity (Bq)
+
+        Nuclide must exist in data and must be unstable
+    """
+    return db.gethalflife(nuclide)*activity/LOG_TWO_BASE_E
