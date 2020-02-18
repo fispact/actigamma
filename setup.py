@@ -1,8 +1,13 @@
+import os
 from setuptools import setup
 
 
+VERSION = ""
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '.VERSION'), 'rt') as vfile:
+      VERSION = vfile.readlines()[0].strip("\n").strip()
+
 setup(name='actigamma',
-      version='0.0.1',
+      version=VERSION,
       description='The package for producing gamma spec from nuclide activities',
       url='https://github.com/fispact/actigamma',
       author='UKAEA',
