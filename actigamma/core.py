@@ -75,7 +75,7 @@ class EnergyGrid(object):
         """
         return np.max(self.bounds)
 
-class LineComputor(object):
+class LineAggregator(object):
     """
         Needs testing!
     """
@@ -136,7 +136,7 @@ class LineComputor(object):
 def activity_from_atoms(db: ReadOnlyDatabase, nuclide: str, atoms: float) -> float:
     """
         Returns activity (Bq) given a number of atoms (typical in FISPACT-II or alike)
-        
+
         Nuclide must exist in data and must be unstable
     """
     return LOG_TWO_BASE_E*atoms/db.gethalflife(nuclide)

@@ -22,7 +22,7 @@ grid = ag.EnergyGrid(bounds=ag.linspace(0.0, 4e6, 10000))
 # plt.xscale('log')
 
 # bin the lines appropriately
-lc = ag.LineComputor(db, grid)
+lc = ag.LineAggregator(db, grid)
 hist, bin_edges = lc(inv, type=SPECTYPE)
 
 # make a plot
