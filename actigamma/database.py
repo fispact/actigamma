@@ -48,6 +48,15 @@ class ReadOnlyDatabase(object):
         return self.__raw
 
     @property
+    def alltypes(self) -> [str]:
+        types = []
+        for _, v in self.__raw.items():
+            for key in v.keys():
+                if key not in ["zai", "halflife"] and key not in types:
+                    types.append(key)
+        return types
+
+    @property
     @asarray
     def allnuclides(self) -> [str]:
         return [k for k, _ in self.__raw.items()]
