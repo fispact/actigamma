@@ -1,8 +1,11 @@
 import matplotlib.pyplot as plt
 import actigamma as ag
 
-# normally gamma but could be something else - "alpha", "SF" if data exists!
-SPECTYPE = "gamma"
+# normally gamma but could be something else - "alpha", "beta" if data exists!
+SPECTYPES = [
+    "gamma",
+    "x-ray"
+]
 
 # setup the DB
 db = ag.ReadOnlyDatabase(ag.DatabaseJSONFileLoader())
@@ -20,14 +23,14 @@ grid = ag.EnergyGrid(bounds=ag.linspace(0.0, 4e6, 10000))
 # plt.xscale('log')
 
 # bin the lines appropriately
-lc = ag.LineAggregator(db, grid)
-hist, bin_edges = lc(inv, type=SPECTYPE)
+lc = ag.MultiTypeLineAggregator(db, grid)
+hist, bin_edges = lc(inv, types=SPECTYPES)
 
 # make a plot
 X, Y = ag.getplotvalues(bin_edges, hist)
 fig = plt.figure(figsize=(12,7))
 plt.plot(X, Y, 'k')
 plt.xlabel("Energy ({})".format(grid.units), fontsize=18)
-plt.ylabel("{} per unit time (s-1)".format(SPECTYPE), fontsize=18)
+plt.ylabel("{} per unit time (s-1)".format("+".join(SPECTYPES)), fontsize=18)
 plt.yscale('log')
 plt.show()

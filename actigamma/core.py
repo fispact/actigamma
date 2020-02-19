@@ -93,12 +93,10 @@ class LineAggregator(object):
         # NOTE: values are intensities multiplied by the activity of each nuclide here
         self.values = []
 
-    def __call__(self, inventory: UnstablesInventory, *args, type: str="gamma", **kwargs):
-        """
-            Gets the lines from the full inventory
+    def _findlines(self, inventory: UnstablesInventory, *args, type: str="gamma", **kwargs):
+        lines = []
+        values = []
 
-            throws an exception if nuclide is stable or is not in database
-        """
         for zai, activity in inventory:
             name = self.db.getname(zai)
             # check it exists in database
@@ -111,9 +109,12 @@ class LineAggregator(object):
                 raise NoDataException(
                     "{} does not have {} decay mode".format(name, type))
 
-            self.lines.extend(self.db.getenergies(name, type=type))
-            self.values.extend(self.db.getintensities(name, type=type)*activity)
+            lines.extend(self.db.getenergies(name, type=type))
+            values.extend(self.db.getintensities(name, type=type)*activity)
 
+        return lines, values
+
+    def _makehist(self, *args, **kwargs):
         hist = np.zeros(self.grid.nrofbins)
 
         if len(self.lines) > 0:
@@ -132,6 +133,34 @@ class LineAggregator(object):
                         ibin = j
 
         return hist, self.grid.bounds
+
+    def __call__(self, inventory: UnstablesInventory, *args, type: str="gamma", **kwargs):
+        """
+            Gets the lines from the full inventory
+
+            throws an exception if nuclide is stable or is not in database
+        """
+        self.lines, self.values = self._findlines(inventory, *args, type, **kwargs)
+        
+        return self._makehist(*args, **kwargs)
+
+class MultiTypeLineAggregator(LineAggregator):
+    """
+        Supports multiple types of spectra - gamma + x-ray +beta for example
+        Needs testing!
+    """
+    def __call__(self, inventory: UnstablesInventory, *args, types: [str]=["gamma", "x-ray"], **kwargs):
+        """
+            Gets the lines from the full inventory
+
+            throws an exception if nuclide is stable or is not in database
+        """
+        for type in types:
+            lines, values = self._findlines(inventory, *args, type=type, **kwargs)
+            self.lines.extend(lines)
+            self.values.extend(values)
+
+        return self._makehist(*args, **kwargs)
 
 def activity_from_atoms(db: ReadOnlyDatabase, nuclide: str, atoms: float) -> float:
     """
