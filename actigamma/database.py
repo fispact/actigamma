@@ -2,7 +2,7 @@ import os
 import json
 
 
-from .decorators import asarray
+from .decorators import asarray, constant
 
 # hacky but will do, the database is one large JSON file with line data
 # we load it into a static data structure which is our database
@@ -15,6 +15,9 @@ class DatabaseJSONFileLoader(object):
     """
         Context manager to handle JSON datafile
     """
+
+    __slots__ = [ 'filename' ]
+
     def __init__(self, datafile=__RAW_DATABASE_DECAY_2012_FILE__):
         self.filename = datafile
 
@@ -30,39 +33,45 @@ class ReadOnlyDatabase(object):
     """
         TODO: handle uncertainties too
     """
+    __slots__ = [ '__raw' ]
+
     def __init__(self, datasource=DatabaseJSONFileLoader()):
-        self._raw = {}
+        self.__raw = {}
         with datasource as db:
-            self._raw = db
+            self.__raw = db
 
     def __contains__(self, nuclide: str) -> bool:
-        return nuclide in self._raw
+        return nuclide in self.__raw
+
+    @constant
+    def raw(self):
+        return self.__raw
 
     @property
     @asarray
     def allnuclides(self) -> [str]:
-        return [k for k, _ in self._raw.items()]
+        return [k for k, _ in self.__raw.items()]
 
     def allnuclidesoftype(self, type: str="gamma") -> [str]:
-        return [k for k, _ in self._raw.items() if type in self._raw[k].keys()]
+        return [k for k, _ in self.__raw.items() if type in self.__raw[k].keys()]
 
     def gettypes(self, nuclide: str) -> [str]:
         """
             Check if it has that particular decay type
         """
-        return [k for k, _ in self._raw[nuclide].items() if k not in ["zai", "halflife"] ]
+        return [k for k, _ in self.__raw[nuclide].items() if k not in ["zai", "halflife"] ]
 
     def hastype(self, nuclide: str, type: str="gamma") -> bool:
         """
             Check if it has that particular decay type
         """
-        return type in self._raw[nuclide]
+        return type in self.__raw[nuclide]
 
     def getname(self, zai: int) -> str:
         """
             ZAI
         """
-        for k, v in self._raw.items():
+        for k, v in self.__raw.items():
             if v['zai'] == zai:
                 return k
         return None
@@ -71,20 +80,20 @@ class ReadOnlyDatabase(object):
         """
             ZAI
         """
-        return self._raw[nuclide]['zai']
+        return self.__raw[nuclide]['zai']
 
     def gethalflife(self, nuclide: str):
         """
             Half-life in seconds
         """
-        return self._raw[nuclide]['halflife']
+        return self.__raw[nuclide]['halflife']
 
     @asarray
     def getenergies(self, nuclide: str, type: str="gamma"):
         """
             Defaults to gamma lines
         """
-        return self._raw[nuclide][type]['lines']['energies']
+        return self.__raw[nuclide][type]['lines']['energies']
 
     @asarray
     def getintensities(self, nuclide: str, type: str="gamma"):
@@ -93,5 +102,5 @@ class ReadOnlyDatabase(object):
 
             Also multiplies by normalisation constant
         """
-        return [ intensity*self._raw[nuclide][type]['lines']['norms'][i] 
-                for i,intensity in enumerate(self._raw[nuclide][type]['lines']['intensities'])]
+        return [ intensity*self.__raw[nuclide][type]['lines']['norms'][i] 
+                for i,intensity in enumerate(self.__raw[nuclide][type]['lines']['intensities'])]

@@ -1,3 +1,5 @@
+from pprint import pprint
+
 
 # function to plot histogram
 def getplotvalues(x, y):
