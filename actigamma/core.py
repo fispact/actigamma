@@ -140,7 +140,7 @@ class LineAggregator(object):
 
             throws an exception if nuclide is stable or is not in database
         """
-        self.lines, self.values = self._findlines(inventory, *args, type, **kwargs)
+        self.lines, self.values = self._findlines(inventory, *args, type=type, **kwargs)
         
         return self._makehist(*args, **kwargs)
 

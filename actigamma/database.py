@@ -56,6 +56,9 @@ class ReadOnlyDatabase(object):
                     types.append(key)
         return types
 
+    def haslines(self, nuclide: str, type: str="gamma") -> bool:
+        return 'lines' in self.__raw[nuclide][type]
+
     @property
     @asarray
     def allnuclides(self) -> [str]:
@@ -102,7 +105,9 @@ class ReadOnlyDatabase(object):
         """
             Defaults to gamma lines
         """
-        return self.__raw[nuclide][type]['lines']['energies']
+        if self.haslines(nuclide, type=type):
+            return self.__raw[nuclide][type]['lines']['energies']
+        return []
 
     @asarray
     def getintensities(self, nuclide: str, type: str="gamma"):
@@ -111,5 +116,7 @@ class ReadOnlyDatabase(object):
 
             Also multiplies by normalisation constant
         """
-        return [ intensity*self.__raw[nuclide][type]['lines']['norms'][i] 
-                for i,intensity in enumerate(self.__raw[nuclide][type]['lines']['intensities'])]
+        if self.haslines(nuclide, type=type):
+            return [ intensity*self.__raw[nuclide][type]['lines']['norms'][i] 
+                    for i,intensity in enumerate(self.__raw[nuclide][type]['lines']['intensities'])]
+        return []
