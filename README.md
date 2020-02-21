@@ -10,7 +10,9 @@
 [![GitHub issues](https://img.shields.io/github/issues/fispact/actigamma)](https://github.com/fispact/actigamma/issues)
 [![GitHub stars](https://img.shields.io/github/stars/fispact/actigamma)](https://github.com/fispact/actigamma/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/fispact/actigamma)](https://github.com/fispact/actigamma/network)
-Converts nuclide activities to gamma spec
+
+
+ActiGamma - Converts nuclide activities to gamma spec. Nothing more, nothing less.
 
 - [Design goals](#design-goals)
 - [Installation](#installation)
