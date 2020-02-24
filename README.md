@@ -1,6 +1,9 @@
 # ActiGamma
 ### Trivial gamma spec from activities
 
+[![Build Status](https://travis-ci.org/fispact/actigamma.svg?branch=develop)](https://travis-ci.org/fispact/actigamma)
+[![Code Coverage](https://codecov.io/gh/fispact/actigamma/branch/develop/graph/badge.svg)](https://codecov.io/gh/fispact/actigamma)
+
 [![PyPI](https://img.shields.io/pypi/v/actigamma.svg)](https://pypi.python.org/pypi/actigamma)
 [![PyPI](https://img.shields.io/pypi/wheel/actigamma.svg)](https://pypi.python.org/pypi/actigamma)
 [![PyPI](https://img.shields.io/pypi/format/actigamma.svg)](https://pypi.python.org/pypi/actigamma)
@@ -46,13 +49,13 @@ import actigamma as ag
 
 Load the database (by default uses decay_2012 library but easy to extend to add others).
 ```python
-db = ag.ReadOnlyDatabase()
+db = ag.Decay2012Database()
 
 # get halflife of Co60
 print(db.gethalflife("Co60"))
 
 # get gamma lines of Co60
-print(db.getenergies("Co60", type="gamma"))
+print(db.getenergies("Co60", spectype="gamma"))
 ```
 
 Define an energy grid (binning). This can be anything (linspace, logspace, custom bounds).
@@ -99,7 +102,7 @@ import actigamma as ag
 SPECTYPE = "gamma"
 
 # setup the DB - currently only decay 2012 exists
-db = ag.ReadOnlyDatabase(ag.DatabaseJSONFileLoader())
+db = ag.Decay2012Database()
 
 # define my unstable inventory by activities (Bq)
 inv = ag.UnstablesInventory(data=[
@@ -113,7 +116,7 @@ grid = ag.EnergyGrid(bounds=ag.linspace(0.0, 4e6, 1000))
 
 # bin the lines appropriately
 lc = ag.LineAggregator(db, grid)
-hist, bin_edges = lc(inv, type=SPECTYPE)
+hist, bin_edges = lc(inv, spectype=SPECTYPE)
 
 # plot ...
 ```
@@ -132,7 +135,7 @@ SPECTYPES = [
 ]
 
 # setup the DB - currently only decay 2012 exists
-db = ag.ReadOnlyDatabase(ag.DatabaseJSONFileLoader())
+db = ag.Decay2012Database()
 
 # define my unstable inventory by activities (Bq)
 inv = ag.UnstablesInventory(data=[

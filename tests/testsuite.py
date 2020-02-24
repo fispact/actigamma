@@ -1,6 +1,7 @@
 import unittest
 import os
 
+from .databasetest import DatabaseInventoryUnitTest
 from .inventorytest import UnstablesInventoryUnitTest
 from .coretest import EnergyGridUnitTest
 

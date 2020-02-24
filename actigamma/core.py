@@ -1,3 +1,8 @@
+"""
+    The module that includes all core calculation
+
+    Includes binning lines into histograms.
+"""
 import math
 import numpy as np
 
@@ -8,10 +13,12 @@ from .database import ReadOnlyDatabase
 from .decorators import asarray
 from .inventory import UnstablesInventory
 
+
 LOG_TWO_BASE_E = math.log(2)
 
 linspace = np.linspace
 logspace = np.logspace
+
 
 class EnergyGrid(object):
     """
@@ -19,7 +26,7 @@ class EnergyGrid(object):
         and some protection on negative values
     """
 
-    __slots__ = [ 'bounds' ]
+    __slots__ = ['bounds']
 
     def __init__(self, bounds=linspace(0.0, 10e6, 10000)):
         """
@@ -33,45 +40,66 @@ class EnergyGrid(object):
 
         self.bounds = bounds
 
-    def __len__(self):
+    def __len__(self) -> int:
+        """
+            The number of energy bounds
+        """
         return len(self.bounds)
 
-    def __getitem__(self, i: int):
+    def __getitem__(self, i: int) -> float:
+        """
+            Get the i'th item in the data (energy bounds)
+        """
         return self.bounds[i]
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """
+            A string representation of the energy bounds
+        """
         return str(self.bounds)
 
     @property
-    def nrofbins(self):
+    def nrofbins(self) -> int:
+        """
+            The number of energy bins, equal to the
+            number of energy bounds - 1
+        """
         return len(self)-1
 
     @property
-    def units(self):
+    def units(self) -> str:
         """
+            Return the unit type as a string
             TODO: support other units
         """
         return "eV"
 
     @property
     @asarray
-    def midpoints(self):
+    def midpoints(self) -> np.array:
         """
-            In eV
+            Return a numpy array of the midpoint values, in eV
+
+            :return: a numpy array of the midpoint values in eV
         """
-        return [ (lower + self.bounds[i+1])*0.5 for i, lower in enumerate(self.bounds[:-1])]
+        return (self.bounds[:-1] + self.bounds[1:])/2
+        # return [ (lower + self.bounds[i+1])*0.5 for i, lower in enumerate(self.bounds[:-1])]
 
     @property
-    def minEnergy(self):
+    def minEnergy(self) -> float:
         """
-            In eV
+            Return the minimum energy, in eV, of the energy grid
+
+            :return: the minimum energy, in eV, of the energy grid
         """
         return np.min(self.bounds)
 
     @property
-    def maxEnergy(self):
+    def maxEnergy(self) -> float:
         """
-            In eV
+            Return the maximum energy, in eV, of the energy grid
+
+            :return: the maximum energy, in eV, of the energy grid
         """
         return np.max(self.bounds)
 
@@ -80,7 +108,7 @@ class LineAggregator(object):
         Needs testing!
     """
 
-    __slots__ = [ 'db', 'grid', 'lines', 'values' ]
+    __slots__ = ['db', 'grid', 'lines', 'values']
 
     def __init__(self, db: ReadOnlyDatabase, grid: EnergyGrid):
         self.db = db
@@ -93,7 +121,7 @@ class LineAggregator(object):
         # NOTE: values are intensities multiplied by the activity of each nuclide here
         self.values = []
 
-    def _findlines(self, inventory: UnstablesInventory, *args, type: str="gamma", **kwargs):
+    def _findlines(self, inventory: UnstablesInventory, *args, spectype: str="gamma", **kwargs):
         lines = []
         values = []
 
@@ -105,12 +133,12 @@ class LineAggregator(object):
                     "{} not in database - maybe too exotic or is it stable?".format(zai))
 
             # check that data exists for that decay type
-            if type not in self.db.gettypes(name):
+            if spectype not in self.db.gettypes(name):
                 raise NoDataException(
-                    "{} does not have {} decay mode".format(name, type))
+                    "{} does not have {} decay mode".format(name, spectype))
 
-            lines.extend(self.db.getenergies(name, type=type))
-            values.extend(self.db.getintensities(name, type=type)*activity)
+            lines.extend(self.db.getenergies(name, spectype=spectype))
+            values.extend(self.db.getintensities(name, spectype=spectype)*activity)
 
         return lines, values
 
@@ -134,13 +162,13 @@ class LineAggregator(object):
 
         return hist, self.grid.bounds
 
-    def __call__(self, inventory: UnstablesInventory, *args, type: str="gamma", **kwargs):
+    def __call__(self, inventory: UnstablesInventory, *args, spectype: str="gamma", **kwargs):
         """
             Gets the lines from the full inventory
 
             throws an exception if nuclide is stable or is not in database
         """
-        self.lines, self.values = self._findlines(inventory, *args, type=type, **kwargs)
+        self.lines, self.values = self._findlines(inventory, *args, spectype=spectype, **kwargs)
         
         return self._makehist(*args, **kwargs)
 
@@ -149,14 +177,14 @@ class MultiTypeLineAggregator(LineAggregator):
         Supports multiple types of spectra - gamma + x-ray +beta for example
         Needs testing!
     """
-    def __call__(self, inventory: UnstablesInventory, *args, types: [str]=["gamma", "x-ray"], **kwargs):
+    def __call__(self, inventory: UnstablesInventory, *args, types: [str] = ["gamma", "x-ray"], **kwargs):
         """
             Gets the lines from the full inventory
 
             throws an exception if nuclide is stable or is not in database
         """
-        for type in types:
-            lines, values = self._findlines(inventory, *args, type=type, **kwargs)
+        for spectype in types:
+            lines, values = self._findlines(inventory, *args, spectype=spectype, **kwargs)
             self.lines.extend(lines)
             self.values.extend(values)
 

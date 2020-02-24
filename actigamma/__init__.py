@@ -1,11 +1,23 @@
-# version in two places - here and .VERSION file
-# TODO: somehow unify this, without reading the .VERSION every time 
-# the package is imported
-__version__ = "0.1.3"
+"""
+    The complete actigamma package
 
-from .database import ReadOnlyDatabase, DatabaseJSONFileLoader
+    ```
+    import actigamma as ag
+
+    db = ag.Decay2012Database()
+
+    ...
+    ```
+"""
+from .database import ReadOnlyDatabase, \
+    DatabaseJSONFileLoader, \
+    DefaultDatabase, \
+    Decay2012Database
 from .decorators import *
 from .core import *
 from .exceptions import *
 from .inventory import *
 from .util import *
+
+# version in two places - here and .VERSION file
+__version__ = "0.1.3"
