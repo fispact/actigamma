@@ -93,7 +93,7 @@ class LineAggregator(object):
         # NOTE: values are intensities multiplied by the activity of each nuclide here
         self.values = []
 
-    def _findlines(self, inventory: UnstablesInventory, *args, type: str="gamma", **kwargs):
+    def _findlines(self, inventory: UnstablesInventory, *args, spectype: str="gamma", **kwargs):
         lines = []
         values = []
 
@@ -105,12 +105,12 @@ class LineAggregator(object):
                     "{} not in database - maybe too exotic or is it stable?".format(zai))
 
             # check that data exists for that decay type
-            if type not in self.db.gettypes(name):
+            if spectype not in self.db.gettypes(name):
                 raise NoDataException(
-                    "{} does not have {} decay mode".format(name, type))
+                    "{} does not have {} decay mode".format(name, spectype))
 
-            lines.extend(self.db.getenergies(name, type=type))
-            values.extend(self.db.getintensities(name, type=type)*activity)
+            lines.extend(self.db.getenergies(name, spectype=spectype))
+            values.extend(self.db.getintensities(name, spectype=spectype)*activity)
 
         return lines, values
 
@@ -134,13 +134,13 @@ class LineAggregator(object):
 
         return hist, self.grid.bounds
 
-    def __call__(self, inventory: UnstablesInventory, *args, type: str="gamma", **kwargs):
+    def __call__(self, inventory: UnstablesInventory, *args, spectype: str="gamma", **kwargs):
         """
             Gets the lines from the full inventory
 
             throws an exception if nuclide is stable or is not in database
         """
-        self.lines, self.values = self._findlines(inventory, *args, type=type, **kwargs)
+        self.lines, self.values = self._findlines(inventory, *args, spectype=spectype, **kwargs)
         
         return self._makehist(*args, **kwargs)
 
@@ -155,8 +155,8 @@ class MultiTypeLineAggregator(LineAggregator):
 
             throws an exception if nuclide is stable or is not in database
         """
-        for type in types:
-            lines, values = self._findlines(inventory, *args, type=type, **kwargs)
+        for spectype in types:
+            lines, values = self._findlines(inventory, *args, spectype=spectype, **kwargs)
             self.lines.extend(lines)
             self.values.extend(values)
 

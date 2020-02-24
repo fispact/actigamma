@@ -5,7 +5,7 @@ import actigamma as ag
 SPECTYPE = "gamma"
 
 # setup the DB
-db = ag.ReadOnlyDatabase(ag.DatabaseJSONFileLoader())
+db = ag.Decay2012Database()
 
 # define my unstable inventory by activities (Bq)
 inv = ag.UnstablesInventory(data=[
@@ -21,7 +21,7 @@ grid = ag.EnergyGrid(bounds=ag.linspace(0.0, 4e6, 10000))
 
 # bin the lines appropriately
 lc = ag.LineAggregator(db, grid)
-hist, bin_edges = lc(inv, type=SPECTYPE)
+hist, bin_edges = lc(inv, spectype=SPECTYPE)
 
 # make a plot
 X, Y = ag.getplotvalues(bin_edges, hist)

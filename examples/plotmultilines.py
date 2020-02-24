@@ -8,7 +8,7 @@ SPECTYPES = [
 ]
 
 # setup the DB
-db = ag.ReadOnlyDatabase(ag.DatabaseJSONFileLoader())
+db = ag.Decay2012Database()
 
 # define my unstable inventory by activities (Bq)
 inv = ag.UnstablesInventory(data=[

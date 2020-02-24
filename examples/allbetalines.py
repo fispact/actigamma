@@ -6,7 +6,7 @@ import actigamma as ag
 SPECTYPE = "beta"
 
 # setup the DB
-db = ag.ReadOnlyDatabase(ag.DatabaseJSONFileLoader())
+db = ag.Decay2012Database()
 
 # define an energy grid between 0 and 4 MeV with 10,000 bins
 grid = ag.EnergyGrid(bounds=ag.linspace(0.0, 4e6, 10000))
@@ -16,9 +16,9 @@ lc = ag.LineAggregator(db, grid)
 
 hist = np.zeros(grid.nrofbins)
 bin_edges = grid.bounds
-for betanuclide in db.allnuclidesoftype(type=SPECTYPE):
+for betanuclide in db.allnuclidesoftype(spectype=SPECTYPE):
     inv = ag.UnstablesInventory(data=[(db.getzai(betanuclide), 1e10)])
-    h, _ = lc(inv, type=SPECTYPE)
+    h, _ = lc(inv, spectype=SPECTYPE)
     hist += h
 
 # make a plot

@@ -1,6 +1,9 @@
 class ActiGammaException(Exception):
     pass
 
+class AbstractClassException(Exception):
+    pass
+
 class UnphysicalValueException(ActiGammaException):
     pass
 

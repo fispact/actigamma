@@ -3,7 +3,10 @@
 # the package is imported
 __version__ = "0.1.3"
 
-from .database import ReadOnlyDatabase, DatabaseJSONFileLoader
+from .database import ReadOnlyDatabase, \
+    DatabaseJSONFileLoader, \
+    DefaultDatabase, \
+    Decay2012Database
 from .decorators import *
 from .core import *
 from .exceptions import *
