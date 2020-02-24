@@ -4,6 +4,10 @@ python:
   - "3.6"
   - "3.7"
   - "3.8-dev"
+branches:
+  only:
+    - master
+    - develop
 # command to install dependencies
 install:
   - pip install -r requirements.dev.txt
