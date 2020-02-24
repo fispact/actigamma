@@ -16,6 +16,7 @@ before_script:
 script:
   - python3 setup.py install
   - python3 setup.py test
+  - python3 $ACTIGAMMA/setup.py test
   - bash scripts/run_coverage
   - python3 scripts/run_pylint.py -j4 --rcfile=.pylintrc --output-format=text --score-threshold=4 actigamma &> pylint.txt
   - score=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)

@@ -1,8 +1,8 @@
 # ActiGamma
 ### Trivial gamma spec from activities
 
-[![Build Status](https://travis-ci.org/fispact/actigamma.svg?branch=develop)](https://travis-ci.org/fispact/actigamma)
-[![Code Coverage](https://codecov.io/gh/fispact/actigamma/branch/develop/graph/badge.svg)](https://codecov.io/gh/fispact/actigamma)
+[![Build Status](https://travis-ci.org/fispact/actigamma.svg?branch=master)](https://travis-ci.org/fispact/actigamma)
+[![Code Coverage](https://codecov.io/gh/fispact/actigamma/branch/master/graph/badge.svg)](https://codecov.io/gh/fispact/actigamma)
 
 [![PyPI](https://img.shields.io/pypi/v/actigamma.svg)](https://pypi.python.org/pypi/actigamma)
 [![PyPI](https://img.shields.io/pypi/wheel/actigamma.svg)](https://pypi.python.org/pypi/actigamma)
