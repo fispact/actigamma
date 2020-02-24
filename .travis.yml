@@ -1,0 +1,23 @@
+language: python
+python:
+  - "3.5"
+  - "3.6"
+  - "3.7"
+  - "3.8-dev"
+# command to install dependencies
+install:
+  - pip install -r requirements.dev.txt
+before_script:
+  - export ACTIGAMMA=$PWD
+script:
+  - python3 setup.py install
+  - python3 setup.py test
+  - bash scripts/run_coverage
+  - python3 scripts/run_pylint.py -j4 --rcfile=.pylintrc --output-format=text --score-threshold=4 actigamma &> pylint.txt
+  - score=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)
+  - echo "Pylint score:" $score
+# run examples (no plotting)
+  - cd $ACTIGAMMA/examples
+  - python3 getenergies.py > energyexampleout.txt
+after_success:
+  - codecov

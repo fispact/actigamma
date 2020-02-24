@@ -1,14 +1,34 @@
-class ActiGammaException(Exception):
-    pass
+"""
+    All ActiGamma exception definitions
+"""
 
-class AbstractClassException(Exception):
-    pass
+
+class ActiGammaException(Exception):
+    """
+        Base exception for all ActiGamma exceptions
+    """
+
+
+class AbstractClassException(ActiGammaException):
+    """
+        Exception for all intantiating abstract classes
+    """
+
 
 class UnphysicalValueException(ActiGammaException):
-    pass
+    """
+        Exception for all using or defining unphysical values
+        such as negative mass or energy
+    """
+
 
 class UnknownOrUnstableNuclideException(ActiGammaException):
-    pass
+    """
+        Exception for a nuclide that is unknown in the database
+    """
+
 
 class NoDataException(ActiGammaException):
-    pass
+    """
+        Exception for missing data in the database
+    """

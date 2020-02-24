@@ -1,9 +1,12 @@
+"""
+    A module for defining inventories of unstable nuclides
+"""
 import collections
 
 from .exceptions import UnphysicalValueException
 
 
-class UnstablesInventory(object):
+class UnstablesInventory():
     """
         A simple data structure to represent inventory data.
         A list of zais and activities (Bq).
@@ -27,18 +30,20 @@ class UnstablesInventory(object):
 
     __slots__ = ['_raw']
 
-    def __init__(self, data=[]):
+    def __init__(self, data=None):
         self._raw = collections.OrderedDict()
         if data:
             for z, a in data:
                 if a <= 0:
-                    raise UnphysicalValueException("Only supports unstable nuclides, activity must be positive.")
+                    raise UnphysicalValueException(
+                        "Only supports unstable nuclides, activity must be positive.")
                 self._raw[z] = self._raw.get(z, 0) + a
 
     def append(self, zai: int, activity: float):
-        if type(zai) == int and type(activity) == float:
+        if isinstance(zai, int) and isinstance(activity, float):
             if activity <= 0:
-                raise UnphysicalValueException("Only supports unstable nuclides, activity must be positive.")
+                raise UnphysicalValueException(
+                    "Only supports unstable nuclides, activity must be positive.")
             self._raw[zai] = self._raw.get(zai, 0) + activity
         else:
             raise TypeError("Expects ZAI as integer and activity as float.")
@@ -69,4 +74,3 @@ class UnstablesInventory(object):
             In Bq
         """
         return list(self._raw.values())
-
