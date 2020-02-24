@@ -75,10 +75,10 @@ class DatabaseInventoryUnitTest(unittest.TestCase):
         self.db = ag.DefaultDatabase(datasource=MockLoader())
 
     def test_nuclides(self):
-        self.assertEqual(['H3', 'Li8'], self.db.allnuclides, "Assert all nuclides")
+        self.assertEqual(['H3', 'Li8'], sorted(self.db.allnuclides), "Assert all nuclides")
         self.assertEqual(['H3'], self.db.allnuclidesoftype(spectype='gamma'), "Assert all nuclides of gamma type")
         self.assertEqual(['Li8'], self.db.allnuclidesoftype(spectype='alpha'), "Assert all nuclides of alpha type")
-        self.assertEqual(['H3', 'Li8'], self.db.allnuclidesoftype(spectype='beta'), "Assert all nuclides of beta type")
+        self.assertEqual(['H3', 'Li8'], sorted(self.db.allnuclidesoftype(spectype='beta')), "Assert all nuclides of beta type")
         self.assertEqual(True, 'H3' in self.db, "Assert H3 in database")
         self.assertEqual(True, 'Li8' in self.db, "Assert Li8 in database")
         self.assertEqual(False, 'h3' in self.db, "Assert h3 not in database")
@@ -86,8 +86,8 @@ class DatabaseInventoryUnitTest(unittest.TestCase):
         self.assertEqual(False, 'U235' in self.db, "Assert U235 not in database")
 
     def test_types(self):
-        self.assertEqual(sorted(['gamma', 'alpha', 'beta', 'SF']), sorted(self.db.alltypes), "Assert all types")
-        self.assertEqual(sorted(['gamma', 'beta', 'SF']), sorted(self.db.gettypes('H3')), "Assert all types")
+        self.assertEqual(sorted(['gamma', 'alpha', 'beta', 'SF']), self.db.alltypes, "Assert all types")
+        self.assertEqual(sorted(['gamma', 'beta', 'SF']), self.db.gettypes('H3'), "Assert all types")
 
     def test_zai(self):
         self.assertEqual(10030, self.db.getzai('H3'), "Assert ZAI H3")

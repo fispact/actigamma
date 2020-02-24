@@ -8,7 +8,7 @@ import os
 import json
 
 
-from .decorators import asarray, constant
+from .decorators import asarray, constant, sortresult
 from .exceptions import AbstractClassException
 
 
@@ -370,6 +370,7 @@ class DefaultDatabase(ReadOnlyDatabase):
         return nuclide in self.raw
 
     @property
+    @sortresult
     def alltypes(self) -> [str]:
         """
             Return all possible unique decay mode types for the whole database
@@ -377,12 +378,12 @@ class DefaultDatabase(ReadOnlyDatabase):
             :returns: a list of strings representing the list of decay types
             in the database
         """
-        types = []
+        spectypes = []
         for _, v in self.raw.items():
             for key in v.keys():
-                if key not in self.IGNORE_KEYS and key not in types:
-                    types.append(key)
-        return types
+                if key not in self.IGNORE_KEYS and key not in spectypes:
+                    spectypes.append(key)
+        return spectypes
 
     def haslines(self, nuclide: str, spectype: str = "gamma") -> bool:
         """
@@ -423,6 +424,7 @@ class DefaultDatabase(ReadOnlyDatabase):
         """
         return [k for k, _ in self.raw.items() if spectype in self.raw[k].keys()]
 
+    @sortresult
     def gettypes(self, nuclide: str) -> [str]:
         """
             Return all unique spectral types for a given radionuclide in the database.
@@ -433,8 +435,8 @@ class DefaultDatabase(ReadOnlyDatabase):
             types for that nuclide
             :raises KeyError: raises an exception if nuclide not in database
         """
-        return [k for k, _ in self.raw[nuclide].items()
-                if k not in self.IGNORE_KEYS]
+        return sorted([k for k, _ in self.raw[nuclide].items()
+                if k not in self.IGNORE_KEYS])
 
     def hastype(self, nuclide: str, spectype: str = "gamma") -> bool:
         """
