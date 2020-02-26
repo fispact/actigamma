@@ -53,7 +53,7 @@ class DatabaseJSONFileLoader():
     """
     __slots__ = ['filename']
 
-    def __init__(self, datafile=__RAW_DATABASE_DECAY_2012_FILE__):
+    def __init__(self, datafile: str = __RAW_DATABASE_DECAY_2012_FILE__):
         """
             Construct the object given a filename to a raw JSON file
 

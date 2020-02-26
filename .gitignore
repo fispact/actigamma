@@ -9,7 +9,7 @@
 __pycache__
 actigamma.egg-info
 .pytest_cache
-
+pylint.txt
 
 build
 dist
