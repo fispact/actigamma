@@ -7,10 +7,8 @@
 import os
 import json
 
-
 from .decorators import asarray, constant, sortresult
 from .exceptions import AbstractClassException
-
 
 # hacky but will do, the database is one large JSON file with line data
 # we load it into a static data structure which is our database
@@ -523,6 +521,28 @@ class DefaultDatabase(ReadOnlyDatabase):
         """
         if self.haslines(nuclide, spectype=spectype):
             return self.raw[nuclide][spectype]['lines']['energies']
+        return []
+
+    @asarray
+    def getenergiesunc(self, nuclide: str, spectype: str = "gamma"):
+        """
+            Get the line energies uncertainties of a given nuclide in eV.
+            Default spectral type is "gamma"
+            Only provides discrete lines.
+
+            If nuclide has no spectral data then returns an empty array.
+
+            :param nuclide: the radionuclide as a string i.e 'H3' or 'U235m'.
+            No spaces and case sensitive!
+            :param spectype: a string representing the type of decay mode.
+            Gamma is default.
+            :returns: a numpy array of energies (eV) for the given nuclide
+            and decay type.
+            :raises KeyError: raises an exception if nuclide and spectype not
+            in database
+        """
+        if self.haslines(nuclide, spectype=spectype):
+            return self.raw[nuclide][spectype]['lines']['energies_unc']
         return []
 
     @asarray
