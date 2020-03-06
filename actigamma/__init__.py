@@ -9,13 +9,11 @@
     ...
     ```
 """
-from .database import ReadOnlyDatabase, \
-    DatabaseJSONFileLoader, \
-    DefaultDatabase, \
-    Decay2012Database
+from .database import *
 from .decorators import *
 from .core import *
 from .exceptions import *
+from .identifier import *
 from .inventory import *
 from .util import *
 

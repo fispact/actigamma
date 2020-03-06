@@ -48,7 +48,7 @@ class MockLoader(object):
                 'mean_normalisation': 1.0,
                 'mean_normalisation_unc': 0.0001,
                 'number': 1},
-                'beta': {'lines': {'energies': [12965000.0],
+                'beta': {'lines': {'energies': [28571.0],
                                     'energies_unc': [30000.0],
                                     'intensities': [1.0],
                                     'intensities_unc': [0.0],
@@ -68,6 +68,7 @@ class MockLoader(object):
             Does nothing
         """
         pass
+
 
 class DatabaseInventoryUnitTest(unittest.TestCase):
 
@@ -106,5 +107,16 @@ class DatabaseInventoryUnitTest(unittest.TestCase):
         self.assertEqual([1.0], self.db.getintensities('H3').tolist(), "Assert gamma intensities H3")
         self.assertEqual([18571.0, 45213.2], self.db.getenergies('H3', spectype='beta').tolist(), "Assert beta energies H3")
         self.assertEqual([1.0, 0.8], self.db.getintensities('H3', spectype='beta').tolist(), "Assert beta intensities H3")
-        self.assertEqual([12965000], self.db.getenergies('Li8', spectype='beta').tolist(), "Assert beta energies Li8")
+        self.assertEqual([28571], self.db.getenergies('Li8', spectype='beta').tolist(), "Assert beta energies Li8")
         self.assertEqual([1.0], self.db.getintensities('Li8', spectype='beta').tolist(), "Assert beta intensities Li8")
+
+    def test_sortedlines(self):
+        alphas = ag.sortedlines(self.db, spectype="alpha")
+        betas = ag.sortedlines(self.db, spectype="beta")
+        gammas = ag.sortedlines(self.db, spectype="gamma")
+        nonsense = ag.sortedlines(self.db, spectype="dsad")
+
+        self.assertEqual(alphas, [("Li8", 1566000.0)], "Assert sorted alphas")
+        self.assertEqual(betas, [("H3", 18571.0), ("Li8", 28571.0), ("H3", 45213.2)], "Assert sorted betas")
+        self.assertEqual(gammas, [("H3", 3571.0)], "Assert sorted gammas")
+        self.assertEqual(nonsense, [], "Assert sorted nonsense")

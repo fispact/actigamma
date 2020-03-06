@@ -434,7 +434,7 @@ class DefaultDatabase(ReadOnlyDatabase):
             :raises KeyError: raises an exception if nuclide not in database
         """
         return sorted([k for k, _ in self.raw[nuclide].items()
-                if k not in self.IGNORE_KEYS])
+            if k not in self.IGNORE_KEYS])
 
     def hastype(self, nuclide: str, spectype: str = "gamma") -> bool:
         """
@@ -585,3 +585,41 @@ def Decay2012Database():
     return DefaultDatabase(
         datasource=DatabaseJSONFileLoader(
             datafile=__RAW_DATABASE_DECAY_2012_FILE__))
+
+
+def sortedlines(db: ReadOnlyDatabase, spectype: str = "gamma", byenergy=True) -> [(str, float)]:
+    """
+        Get a sorted list (by increasing line energy) of nuclides 
+        with energies.
+
+        :param db: the database holding line energies
+        :param spectype: a string representing the type of decay mode.
+        Gamma is default.
+        :param byenergy: by default always sort by energy, otherwise sort
+        alphabetically on nuclide name.
+        :returns: a list of str,float pairs with the first representing the
+        nuclide name, and the second representing the energy of the line
+
+        ```
+            db = ag.Decay2012Database()
+            gammalines = sortedlines(db, spectype="gamma")
+
+            # gammalines
+            >>> [('U235m', 76.8), ('Es254', 1100.0), ('Ag110m', 1160.0), 
+                ('Tl201', 1580.0), ('Pt193m', 1642.0), ...]
+        ```
+    """
+
+    # get all nuclides of type spectype
+    allnuclides = db.allnuclidesoftype(spectype=spectype)
+
+    # all lines 
+    alllines = []
+    for nuc in allnuclides:
+        lines = db.getenergies(nuc, spectype=spectype)
+        nuclides = [nuc]*len(lines)
+        alllines.extend(zip(nuclides, lines))
+
+    # sort by energy
+    key = (1 if byenergy else 0)
+    return sorted(alllines, key=lambda x: x[key])
