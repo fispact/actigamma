@@ -1,11 +1,14 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+import matplotlib.colors as colors
 from matplotlib import cm
 import numpy as np
 import pypact as pp
 
 import actigamma as ag
 
+COLOURS = ['white', 'blue', 'red', 'green']
+cmap = colors.ListedColormap(COLOURS)
 
 def nuclide_mapping(Z, A):
     """
@@ -32,7 +35,6 @@ def make_full_nuclide_chart(data_matrix=None, figsize=(12, 8), cmap='Set1'):
     # X and Y are inverted
     if data_matrix is None:
         data_matrix = np.zeros(shape=(YSIZE, XSIZE))
-        data_matrix[:, :] = 0.0
         
     assert data_matrix.shape == (YSIZE, XSIZE)
 
@@ -113,14 +115,13 @@ def make_full_nuclide_chart(data_matrix=None, figsize=(12, 8), cmap='Set1'):
     plt.text(X-0.5+5, Y-0.5, r'Oganesson', fontsize=10)
     plt.arrow(X-0.5, Y-0.5, 5, 0, fc='k', ec='k', alpha=0.5, width=0.05,
                 head_width=0, head_length=0)
-
-    # set everything that is not in the nuclide chart to grey
-    # for 'Set1' this is 8
+            
+    # set everything that is not in the nuclide chart to white
     for x in range(XSIZE):
         for y in range(YSIZE):
             if (x, y) not in all_isotopes:
-                data_matrix[y, x] = 8
-            
+                data_matrix[y, x] = COLOURS.index('white')
+                
     im = plt.imshow(data_matrix, cmap=cmap)
     # ax.invert_yaxis()
     ax.axis('off')
@@ -138,34 +139,32 @@ def make_full_nuclide_chart(data_matrix=None, figsize=(12, 8), cmap='Set1'):
     Main script 
 """
 SPECTYPE = "gamma"
-# 'Set1', 'Set2', 'Dark2' or 'tab10' work well
-cmap = 'Set1'
 # setup the DB
 db = ag.Decay2012Database()
 allradionuclides = db.allnuclidesoftype(spectype=SPECTYPE)
 
-# for Set1 1 == blue - all nuclides that are either stable or no data in database
-value = 1
+# for 1 == blue - all nuclides that are either stable or no data in database
+value = COLOURS.index('blue')
 allCount = pp.NUMBER_OF_ISOTOPES
-allnuclideArtist = plt.Line2D((0,1),(0,0), color=cm.__getattribute__(cmap)(value), marker='o', linestyle='')
-data_matrix = np.ones(shape=(140, 90))
+allnuclideArtist = plt.Line2D((0,1),(0,0), color=COLOURS[value], marker='o', linestyle='')
+data_matrix = np.zeros(shape=(140, 90))
 data_matrix[:, :] = value
 
 # show all radioisotopes
-# for Set1 0 == red - all nuclides that are unstable and exist in database
-value = 0
-unstablenuclideArtist = plt.Line2D((0,1),(0,0), color=cm.__getattribute__(cmap)(value), marker='o', linestyle='')
+# for 2 == red - all nuclides that are unstable and exist in database
+value = COLOURS.index('red')
+unstablenuclideArtist = plt.Line2D((0,1),(0,0), color=COLOURS[value], marker='o', linestyle='')
 for nuc in db.allnuclides:
     z, a, _ = ag.get_zai_props(db, nuc)
     x, y = nuclide_mapping(z, a)
     data_matrix[x, y] = value
     
 # show all radioisotopes for that spectype
-# for Set1 2 == green - all nuclides that are unstable and have gamma lines in database
-value = 2
+# for 3 == green - all nuclides that are unstable and have gamma lines in database
+value = COLOURS.index('green')
 allGammaCount = len(allradionuclides)
 allUnstableCount = len(db.allnuclides) - allGammaCount
-gammanuclideArtist = plt.Line2D((0,1),(0,0), color=cm.__getattribute__(cmap)(value), marker='o', linestyle='')
+gammanuclideArtist = plt.Line2D((0,1),(0,0), color=COLOURS[value], marker='o', linestyle='')
 for nuc in allradionuclides:
     z, a, _ = ag.get_zai_props(db, nuc)
     x, y = nuclide_mapping(z, a)
