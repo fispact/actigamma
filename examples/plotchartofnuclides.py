@@ -26,9 +26,9 @@ def nuclide_mapping(Z, A):
 
 
 def make_full_nuclide_chart(data_matrix=None, figsize=(12, 8), cmap='Set1'):
-    XSIZE = 135
+    XSIZE = 140
     YSIZE = 90
-    # define an empty matrix of size (90,135)
+    # define an empty matrix of size (90,140)
     # X and Y are inverted
     if data_matrix is None:
         data_matrix = np.zeros(shape=(YSIZE, XSIZE))
@@ -65,6 +65,55 @@ def make_full_nuclide_chart(data_matrix=None, figsize=(12, 8), cmap='Set1'):
             rect = patches.Rectangle((X-0.5, Y-0.5), 1, 1, linewidth=1, edgecolor='k',facecolor='none')
             ax.add_patch(rect)
 
+    # identify key elements
+    # Hydrogen
+    X, Y = nuclide_mapping(1, 5)
+    plt.text(X-0.5+10, Y-0.5, r'Hydrogen', fontsize=10)
+    plt.arrow(X-0.5, Y-0.5, 10, 0, fc='k', ec='k', alpha=0.5, width=0.05,
+                head_width=0, head_length=0)
+
+    # Chromium
+    X, Y = nuclide_mapping(24, 54)
+    plt.text(X-0.5+20, Y-0.5, r'Chromium', fontsize=10)
+    plt.arrow(X-0.5, Y-0.5, 20, 0, fc='k', ec='k', alpha=0.5, width=0.05,
+                head_width=0, head_length=0)
+
+    # Manganese
+    X, Y = nuclide_mapping(25, 60)
+    plt.text(X-0.5+20, Y-0.5, r'Manganese', fontsize=10)
+    plt.arrow(X-0.5, Y-0.5, 20, 0, fc='k', ec='k', alpha=0.5, width=0.05,
+                head_width=0, head_length=0)
+
+    # Gadolinium
+    X, Y = nuclide_mapping(64, 160)
+    plt.text(X-0.5+10, Y-0.5, r'Gadolinium', fontsize=10)
+    plt.arrow(X-0.5, Y-0.5, 10, 0, fc='k', ec='k', alpha=0.5, width=0.05,
+                head_width=0, head_length=0)
+
+    # Terbium
+    X, Y = nuclide_mapping(65, 160)
+    plt.text(X-0.5+20, Y-0.5, r'Terbium', fontsize=10)
+    plt.arrow(X-0.5, Y-0.5, 20, 0, fc='k', ec='k', alpha=0.5, width=0.05,
+                head_width=0, head_length=0)
+
+    # Plutonium
+    X, Y = nuclide_mapping(94, 235)
+    plt.text(X-0.5+15, Y-0.5, r'Plutonium', fontsize=10)
+    plt.arrow(X-0.5, Y-0.5, 15, 0, fc='k', ec='k', alpha=0.5, width=0.05,
+                head_width=0, head_length=0)
+
+    # Americium
+    X, Y = nuclide_mapping(95, 240)
+    plt.text(X-0.5+20, Y-0.5, r'Americium', fontsize=10)
+    plt.arrow(X-0.5, Y-0.5, 20, 0, fc='k', ec='k', alpha=0.5, width=0.05,
+                head_width=0, head_length=0)
+
+    # Oganesson
+    X, Y = nuclide_mapping(118, 294)
+    plt.text(X-0.5+5, Y-0.5, r'Oganesson', fontsize=10)
+    plt.arrow(X-0.5, Y-0.5, 5, 0, fc='k', ec='k', alpha=0.5, width=0.05,
+                head_width=0, head_length=0)
+
     # set everything that is not in the nuclide chart to grey
     # for 'Set1' this is 8
     for x in range(XSIZE):
@@ -99,7 +148,7 @@ allradionuclides = db.allnuclidesoftype(spectype=SPECTYPE)
 value = 1
 allCount = pp.NUMBER_OF_ISOTOPES
 allnuclideArtist = plt.Line2D((0,1),(0,0), color=cm.__getattribute__(cmap)(value), marker='o', linestyle='')
-data_matrix = np.ones(shape=(135, 90))
+data_matrix = np.ones(shape=(140, 90))
 data_matrix[:, :] = value
 
 # show all radioisotopes

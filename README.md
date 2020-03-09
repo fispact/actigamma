@@ -14,6 +14,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/fispact/actigamma)](https://github.com/fispact/actigamma/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/fispact/actigamma)](https://github.com/fispact/actigamma/network)
 
+![ChartOfNuclides](https://github.com/fispact/actigamma/blob/master/examples/figures/chartofnuclides.png)
 
 ActiGamma - Converts nuclide activities to gamma spec. Nothing more, nothing less.
 
