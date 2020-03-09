@@ -287,6 +287,23 @@ class MultiTypeLineAggregator(LineAggregator):
         return self._makehist(*args, **kwargs)
 
 
+
+def get_zai_props(db: ReadOnlyDatabase, nuc: str) -> (int, int, int):
+    # Z, A, I
+    """
+        Returns the charge (Z), atomic mass number (A) and the isomeric state (I).
+
+        Nuclide must exist in data and must be unstable.
+
+        :param db: The database to access halflife data used in the conversion
+        :param nuclide: the radionuclide as a string i.e 'H3' or 'U235m'.
+        No spaces and case sensitive!
+        :returns: the (Z, A, I) tuple
+    """
+    zai = db.getzai(nuc)
+    return math.floor(zai/10000), math.floor(zai/10) % 1000, zai % 10
+
+
 def activity_from_atoms(
         db: ReadOnlyDatabase,
         nuclide: str,

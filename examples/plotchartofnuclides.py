@@ -156,7 +156,7 @@ data_matrix[:, :] = value
 value = 0
 unstablenuclideArtist = plt.Line2D((0,1),(0,0), color=cm.__getattribute__(cmap)(value), marker='o', linestyle='')
 for nuc in db.allnuclides:
-    z, a, _ = pp.library.nuclidelib.get_zai_props(db.getzai(nuc))
+    z, a, _ = ag.get_zai_props(db, nuc)
     x, y = nuclide_mapping(z, a)
     data_matrix[x, y] = value
     
@@ -167,7 +167,7 @@ allGammaCount = len(allradionuclides)
 allUnstableCount = len(db.allnuclides) - allGammaCount
 gammanuclideArtist = plt.Line2D((0,1),(0,0), color=cm.__getattribute__(cmap)(value), marker='o', linestyle='')
 for nuc in allradionuclides:
-    z, a, _ = pp.library.nuclidelib.get_zai_props(db.getzai(nuc))
+    z, a, _ = ag.get_zai_props(db, nuc)
     x, y = nuclide_mapping(z, a)
     data_matrix[x, y] = value
 
