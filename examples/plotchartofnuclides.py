@@ -158,7 +158,7 @@ class ColouredChartOfNuclidesPlot():
     def addlegend(self, labels, colours):
         art = []
         for label, colour in zip(labels, colours):
-            art.append(self.plt_engine.Line2D((0,1),(0,0), color=colour, marker='o', linestyle=''))
+            art.append(self.plt_engine.Line2D((0,1), (0,0), color=colour, marker='o', linestyle=''))
 
         self.ax.legend(art, labels)
 

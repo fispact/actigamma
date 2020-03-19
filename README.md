@@ -16,7 +16,10 @@
 
 ![ChartOfNuclides](https://github.com/fispact/actigamma/blob/master/examples/figures/chartofnuclides.png)
 
-ActiGamma - Converts nuclide activities to gamma spec. Nothing more, nothing less.
+![GammaLinesAnimation](https://github.com/fispact/actigamma/blob/master/examples/figures/halflifelines.gif)
+
+
+__ActiGamma__ - Converts nuclide activities to gamma spec. Nothing more, nothing less.
 
 - [Design goals](#design-goals)
 - [Installation](#installation)
