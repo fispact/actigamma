@@ -1,5 +1,27 @@
+"""
+    Make a plot to show how dense the gamma lines are.
+
+    Showing the maximum number of nuclides across the
+    0 - 4 MeV range which all share the same bin (similar energies).
+
+    We take advantage of the Line Aggregator to iterate over
+    all lines per nuclide, only logging a nuclide once in each bin at most.
+
+    Obviously if we only have 1 bin then this should be all (~1709) nuclides
+    with gamma lines.
+
+    If looping to high number of bins (script goes upto 1 million) it can take
+    some time, but uses multiprocessing to speed things up.
+
+    This has been precomputed with high number of bins, and you can simply plot
+    these or run the script yourself. 
+"""
+
 import matplotlib.pyplot as plt
+import math
 import numpy as np
+import multiprocessing
+from tqdm import tqdm
 
 import actigamma as ag
 
@@ -12,7 +34,6 @@ class BinaryLineAggregator(ag.LineAggregator):
         We just want to know if a line exists or not.
         We don't care about activities.
     """
-
     def _makehist(self, *args, **kwargs):
         hist = np.zeros(self.grid.nrofbins)
 
@@ -41,18 +62,58 @@ class BinaryLineAggregator(ag.LineAggregator):
         return hist, self.grid.bounds
 
 SPECTYPE = "gamma"
+MIN_ENERGY = 0.0
+MAX_ENERGY = 4e6
 
 # setup the DB
 db = ag.Decay2012Database()
 
-grid = ag.EnergyGrid(bounds=ag.linspace(0.0, 4e6, 1000))
+# loop through possible different binning
+bins = ag.logspace(0, 6, 20)
+    
+def getmaxcount(nrofbins):
+    grid = ag.EnergyGrid(bounds=ag.linspace(MIN_ENERGY, MAX_ENERGY, math.floor(nrofbins)+1))
 
+    # bin the lines appropriately
+    lc = BinaryLineAggregator(db, grid)
+
+    hist = np.zeros(grid.nrofbins)
+    bin_edges = grid.bounds
+    for nuclide in tqdm(db.allnuclidesoftype(spectype=SPECTYPE)):
+        inv = ag.UnstablesInventory(data=[(db.getzai(nuclide), 1)])
+        h, _ = lc(inv, spectype=SPECTYPE)
+        hist += h
+
+    return np.max(hist)
+
+# # Get the lines
+# pool = multiprocessing.Pool(processes = 4)
+# y = pool.map(getmaxcount, bins)
+# print(bins)
+# print(y)
+
+# Or simply plot
+# previously ran results
+bins = ag.logspace(0, 7, 30)
+y = [1707.0, 1707.0, 1680.0, 1625.0, 1499.0, 1300.0, 
+    1116.0, 954.0, 780.0, 611.0, 448.0, 316.0, 214.0, 
+    143.0, 101.0, 64.0, 44.0, 31.0, 26.0, 15.0, 14.0, 
+    13.0, 12.0, 12.0, 12.0, 12.0, 12.0, 12.0, 12.0, 12.0]
+
+plt.plot(bins, y, 'ko')
+plt.xscale('log')
+plt.yscale('log')
+plt.xlabel('Number of bins', fontsize=18)
+plt.ylabel('Max nr. unique nuclides', fontsize=18)
+
+# look at the lines for one type of binning.
 # bin the lines appropriately
+grid = ag.EnergyGrid(bounds=ag.linspace(MIN_ENERGY, MAX_ENERGY, 1000))
 lc = BinaryLineAggregator(db, grid)
 
 hist = np.zeros(grid.nrofbins)
 bin_edges = grid.bounds
-for nuclide in db.allnuclidesoftype(spectype=SPECTYPE):
+for nuclide in tqdm(db.allnuclidesoftype(spectype=SPECTYPE)):
     inv = ag.UnstablesInventory(data=[(db.getzai(nuclide), 1)])
     h, _ = lc(inv, spectype=SPECTYPE)
     hist += h
@@ -72,5 +133,4 @@ plt.plot(X, Y, 'k')
 plt.xlabel("Energy ({})".format(grid.units), fontsize=18)
 plt.ylabel("Number of lines per bin".format(SPECTYPE), fontsize=18)
 
-# plt.yscale('log')
 plt.show()

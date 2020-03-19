@@ -587,7 +587,8 @@ def Decay2012Database():
             datafile=__RAW_DATABASE_DECAY_2012_FILE__))
 
 
-def sortedlines(db: ReadOnlyDatabase, spectype: str = "gamma", byenergy=True) -> [(str, float)]:
+def sortedlines(db: ReadOnlyDatabase, spectype: str = "gamma", 
+                byenergy: bool = True) -> [(str, float)]:
     """
         Get a sorted list (by increasing line energy) of nuclides 
         with energies.
