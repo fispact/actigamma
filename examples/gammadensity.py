@@ -115,7 +115,7 @@ hist = np.zeros(grid.nrofbins)
 bin_edges = grid.bounds
 for nuclide in tqdm(db.allnuclidesoftype(spectype=SPECTYPE)):
     inv = ag.UnstablesInventory(data=[(db.getzai(nuclide), 1)])
-    h, _ = lc(inv, spectype=SPECTYPE)
+    h, _ = lc(inv, spectype=SPECTYPE, include_same_nuclide=False)
     hist += h
 
 # make a plot of cumulative 
