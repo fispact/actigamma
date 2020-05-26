@@ -18,9 +18,10 @@ script:
   - python3 setup.py test
   - python3 $ACTIGAMMA/setup.py test
   - bash scripts/run_coverage
-  - python3 scripts/run_pylint.py -j4 --rcfile=.pylintrc --output-format=text --score-threshold=4 actigamma &> pylint.txt
-  - score=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)
-  - echo "Pylint score:" $score
+# problem with pylint
+#  - python3 scripts/run_pylint.py -j4 --rcfile=.pylintrc --output-format=text --score-threshold=4 actigamma &> pylint.txt
+#  - score=$(sed -n 's/^Your code has been rated at \([-0-9.]*\)\/.*/\1/p' pylint.txt)
+#  - echo "Pylint score:" $score
 # run examples (no plotting)
   - cd $ACTIGAMMA/examples
   - python3 getenergies.py > energyexampleout.txt
