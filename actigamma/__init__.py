@@ -18,4 +18,4 @@ from .inventory import *
 from .util import *
 
 # version in two places - here and .VERSION file
-__version__ = "0.1.3"
+__version__ = "0.1.4"
