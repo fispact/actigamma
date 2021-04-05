@@ -1,7 +1,7 @@
 # ActiGamma
 ### Trivial gamma spec from activities
 
-[![GitHub Actions](https://github.com/fispact/actigamma/workflows/Python%20package/badge.svg?branch=master)(https://github.com/fispact/actigamma/actions/workflows/python-package.yml)
+[![GitHub Actions](https://github.com/fispact/actigamma/workflows/Python%20package/badge.svg?branch=master)](https://github.com/fispact/actigamma/actions/workflows/python-package.yml)
 [![Build Status](https://travis-ci.org/fispact/actigamma.svg?branch=master)](https://travis-ci.org/fispact/actigamma)
 [![Code Coverage](https://codecov.io/gh/fispact/actigamma/branch/master/graph/badge.svg)](https://codecov.io/gh/fispact/actigamma)
 
