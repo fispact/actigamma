@@ -88,9 +88,9 @@ inv = ag.UnstablesInventory(data=[
 To create an inventory from a list of atoms (instead of activities) use the following.
 ```python
 inv = ag.UnstablesInventory(data=[
-    (db.getzai("Co60"), ag.atoms_from_activity(db, "Co60", 2.36853908671135e+22)),
-    (db.getzai("Pu238"), ag.atoms_from_activity(db, "Pu238", 15970864933847.367)),
-    (db.getzai("U235"), ag.atoms_from_activity(db, "U235", 1.730297451446211e+25))
+    (db.getzai("Co60"), ag.activity_from_atoms(db, "Co60", 2.36853908671135e+22)),
+    (db.getzai("Pu238"), ag.activity_from_atoms(db, "Pu238", 15970864933847.367)),
+    (db.getzai("U235"), ag.activity_from_atoms(db, "U235", 1.730297451446211e+25))
 ])
 ```
 
