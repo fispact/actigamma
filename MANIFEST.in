@@ -1,1 +1,1 @@
-include actigamma/data/lines_decay_2012.min.json
+include actigamma/data/lines_decay_2012.min.json .VERSION README.md
