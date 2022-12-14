@@ -96,7 +96,7 @@ inv = ag.UnstablesInventory(data=[
 
 Get the histogram and do what you want with it.
 ```python
-hist, bin_edges = lc(inv, type=SPECTYPE)
+hist, bin_edges = lc(inv, spectype=SPECTYPE)
 
 # plot here
 ...
