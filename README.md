@@ -163,7 +163,7 @@ grid = ag.EnergyGrid(bounds=ag.linspace(0.0, 4e6, 1000))
 
 # bin the lines appropriately
 lc = ag.MultiTypeLineAggregator(db, grid)
-hist, bin_edges = lc(inv, types=SPECTYPES)
+hist, bin_edges = lc(inv, spectype=SPECTYPES)
 
 # plot ...
 ```
